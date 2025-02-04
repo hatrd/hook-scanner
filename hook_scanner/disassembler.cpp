@@ -11,7 +11,7 @@ std::tuple< ZyanStatus, ZydisDecodedInstruction*, ZydisDecodedOperand*> zydis::d
 {
 	static ZydisDecodedInstruction instruction;
 	static ZydisDecodedOperand operands[ZYDIS_MAX_OPERAND_COUNT_VISIBLE];
-	ZyanStatus status = ZydisDecoderDecodeFull(&this->decoder, instruction_address, instruction_length, &instruction, operands, ZYDIS_MAX_OPERAND_COUNT_VISIBLE, ZYDIS_DFLAG_VISIBLE_OPERANDS_ONLY);
+	ZyanStatus status = ZydisDecoderDecodeFull(&this->decoder, instruction_address, instruction_length, &instruction, operands);
 
 	return { status, &instruction, operands };
 }
@@ -54,7 +54,7 @@ ZydisRegister zydis::disassembler::get_instruction_register(ZydisDecodedInstruct
 std::string zydis::disassembler::format_instruction(ZydisDecodedInstruction& instruction, ZydisDecodedOperand* operands, ZyanU64 runtime_address)
 {
 	char buffer[256];
-	ZydisFormatterFormatInstruction(&this->formatter, &instruction, operands, instruction.operand_count_visible, buffer, sizeof(buffer), runtime_address);
+	ZydisFormatterFormatInstruction(&this->formatter, &instruction, operands, instruction.operand_count_visible, buffer, sizeof(buffer), runtime_address, nullptr);
 
 	return buffer;
 }
